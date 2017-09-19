@@ -5,13 +5,32 @@
  * For more details take a look at the Java Quickstart chapter in the Gradle
  * user guide available at https://docs.gradle.org/3.5/userguide/tutorial_java_projects.html
  */
+group 'org.njinx'
+version '1.0'
 
-/*
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
+apply plugin: 'idea'
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+jar {
+    archiveName = 'njinx.jar'
+    manifest {
+        attributes 'Main-Class': 'org.njinx.Bootstrap'
+    }
+}
 // In this section you declare where to find the dependencies of your project
 repositories {
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
     // Use 'jcenter' for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
@@ -28,4 +47,4 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
 }
-*/
+
