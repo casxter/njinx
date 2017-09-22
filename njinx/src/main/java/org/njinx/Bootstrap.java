@@ -1,8 +1,7 @@
 package org.njinx;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -23,6 +22,18 @@ public class Bootstrap {
                 Socket socket = serverSocket.accept();
                 OutputStream out = socket.getOutputStream();
                 DataOutputStream dos = new DataOutputStream(out);
+
+                InputStream inputStream = socket.getInputStream();
+                BufferedInputStream bis = new BufferedInputStream(inputStream);
+                byte[] buffer = new byte[1024];
+
+                StringBuilder sb = new StringBuilder();
+                while (bis.read(buffer) != -1){
+                    sb.append(new String(buffer,"UTF-8"));
+                }
+
+                System.out.println(sb.toString());
+
                 dos.writeUTF("njinx");
                 dos.flush();
                 dos.close();
