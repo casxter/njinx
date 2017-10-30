@@ -1,5 +1,7 @@
 package org.njinx;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,14 +49,14 @@ public class Response {
                 dos.writeUTF("Content-Length: " + file.length() + "\r\n");
                 dos.writeUTF("\r\n");
 
+                dos.flush();
 
                 fis = new FileInputStream(file);
-                int ch = fis.read(bytes, 0, BUFFER_SIZE);
-                while (ch != -1) {
-                    dos.write(bytes, 0, ch);
-                    ch = fis.read(bytes, 0, BUFFER_SIZE);
-                    dos.flush();
-                }
+
+                IOUtils.copy(fis, output);
+
+                output.flush();
+
             } else {
                 // file not found
                 String errorMessage = "HTTP/1.1 404 File Not Found\r\n" + "Content-Type: text/html\r\n"
@@ -63,6 +65,7 @@ public class Response {
             }
 
             dos.close();
+            output.close();
         } catch (Exception e) {
             // thrown if cannot instantiate a File object
             System.out.println(e.toString());
